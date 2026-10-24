@@ -1,6 +1,9 @@
 # loading CSV
 import streamlit as st
 import pandas as pd
+from pathlib import Path
+
+DATA_PATH = Path(__file__).parent / "data" / "resale_data.csv"
 DATA_PATH = "./data/resale_data.csv"
 df = pd.read_csv(DATA_PATH) #store csv in variable "df"
 df["month"] = pd.to_datetime(df["month"]) #change the month column of the df to month
@@ -16,14 +19,14 @@ st.dataframe(df.head(20), use_container_width=True)
 
 # Unique towns and sidebar
 st.sidebar.header("Filters")
-unique_towns = sorted(df["town"].dropna().unique())
-unique_flat_types = sorted(df["flat_type"].dropna().unique())
+unique_towns = sorted(df["town"].dropna().unique()) #create a variable "unique_towns" that takes the town column, removes null and duplicate values
+unique_flat_types = sorted(df["flat_type"].dropna().unique()) #ditto for flat type
 
-selected_towns = st.sidebar.multiselect("Town", unique_towns, default=[])
-selected_flat_types = st.sidebar.multiselect("Flat Type", unique_flat_types, default=[])
+selected_towns = st.sidebar.multiselect("Town", unique_towns, default=[]) #create a multiselect sidebar called "Town" that uses the "unique_towns" list in the sidebar
+selected_flat_types = st.sidebar.multiselect("Flat Type", unique_flat_types, default=[]) #ditto for "unique_flat_types"
 
 # Slider for resale price       
-min_price = int(df["resale_price"].min())
+min_price = int(df["resale_price"].min()) #what is the minimum and what is the maximum price
 max_price = int(df["resale_price"].max())
 
 price_range = st.sidebar.slider(
